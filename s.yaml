@@ -25,7 +25,7 @@ services:
           - acs:fc:cn-beijing:official:layers/Python3-Flask2x/versions/2
         memorySize: 32768
         instanceType: fc.gpu.tesla.1
-        gpuMemorySize: 32768
+        gpuMemorySize: 16384
         cpu: 16
         timeout: 60
         codeUri: ./
