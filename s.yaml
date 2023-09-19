@@ -1,44 +1,55 @@
 edition: 1.0.0
-name: fc-stable-diffusion
+name: my-framework-app
 access: default
 services:
-  cn-beijing-stable-diffusion-sd:
-    component: devsapp/fc
+  framework:
+    component: fc
     props:
       region: cn-beijing
       service:
-        description: stable-diffusion部署到函数计算
+        name: serverless-devs-application
         internetAccess: true
-        name: stable-diffusion
       function:
         handler: index.handler
-        timeout: 600
-        diskSize: 10240
-        caPort: 7860
-        instanceType: fc.gpu.tesla.1
+        name: stable-diffusion-webui-xq7h
+        description: Initialize
         runtime: custom
-        cpu: 8
-        instanceConcurrency: 1
+        environmentVariables:
+          PATH: >-
+            /opt/python3.10/bin:/usr/local/bin/apache-maven/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ruby/bin:/opt/bin:/code:/code/bin
+          PYTHONPATH: /opt/python:/code
+          LD_LIBRARY_PATH: >-
+            /code:/code/lib:/usr/local/lib:/opt/lib:/opt/php8.1/lib:/opt/php8.0/lib:/opt/php7.2/lib
+        layers:
+          - acs:fc:cn-beijing:official:layers/Python310/versions/2
+          - >-
+            acs:fc:cn-beijing:official:layers/Python310-Package-Collection/versions/2
+          - acs:fc:cn-beijing:official:layers/Python3-Flask2x/versions/2
         memorySize: 32768
-        environmentVariables: {}
-        gpuMemorySize: 16384
-        name: sd
-        asyncConfiguration: {}
+        instanceType: fc.gpu.tesla.1
+        instanceConcurrency: 100
+        gpuMemorySize: 8192
+        cpu: 16
+        timeout: 600
+        codeUri: ./
+        diskSize: 512
+        caPort: 7860
+        customRuntimeConfig:
+          command:
+            - python
+          args:
+            - app.py
       triggers:
-        - name: defaultTrigger
-          description: ''
+        - name: httpTrigger
           type: http
           qualifier: LATEST
           config:
+            authType: anonymous
+            disableURLInternet: false
             methods:
               - GET
               - POST
               - PUT
               - DELETE
-            authType: anonymous
-            disableURLInternet: false
-      customDomains:
-        - domainName: auto
-          protocol: HTTP
-          routeConfigs:
-            - path: /*
+              - HEAD
+              - PATCH
