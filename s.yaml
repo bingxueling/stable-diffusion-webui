@@ -53,3 +53,8 @@ services:
               - DELETE
               - HEAD
               - PATCH
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
