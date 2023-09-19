@@ -28,8 +28,8 @@ services:
         memorySize: 32768
         instanceType: fc.gpu.tesla.1
         instanceConcurrency: 100
-        gpuMemorySize: 8192
-        cpu: 16
+        gpuMemorySize: 16384
+        cpu: 8
         timeout: 600
         codeUri: ./
         diskSize: 512
