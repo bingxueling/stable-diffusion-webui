@@ -8,7 +8,9 @@ services:
       region: cn-beijing
       service:
         name: serverless-devs-application
+        internetAccess: true
       function:
+        handler: index.handler
         name: stable-diffusion-webui-xq7h
         description: Initialize
         runtime: custom
@@ -39,8 +41,10 @@ services:
       triggers:
         - name: httpTrigger
           type: http
+          qualifier: LATEST
           config:
             authType: anonymous
+            disableURLInternet: false
             methods:
               - GET
               - POST
